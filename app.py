@@ -5,6 +5,9 @@ def show_menu():
     print("1. View Users")
     print("2. Exit")
 
+def login(username):
+    print(f"{username} logged in successfully.")
+
 while True:
     show_menu()
 
@@ -23,3 +26,5 @@ while True:
 
     else:
         print("Invalid choice.")
+
+   
