@@ -4,10 +4,13 @@ def show_menu():
     print("\n=== User Management System ===")
     print("1. View Users")
     print("2. Exit")
-
+    
 def view_profile(username):
     print(f"Displaying profile of {username}")
     
+def signup(username):
+    users.append(username)
+    print(f"{username} registered successfully.")
 while True:
     show_menu()
 
