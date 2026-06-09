@@ -5,6 +5,16 @@ def show_menu():
     print("1. View Users")
     print("2. Exit")
 
+def login(username):
+    print(f"{username} logged in successfully.")
+
+    
+def view_profile(username):
+    print(f"Displaying profile of {username}")
+    
+def signup(username):
+    users.append(username)
+    print(f"{username} registered successfully.")
 while True:
     show_menu()
 
@@ -23,3 +33,5 @@ while True:
 
     else:
         print("Invalid choice.")
+
+   
