@@ -5,6 +5,9 @@ def show_menu():
     print("1. View Users")
     print("2. Exit")
 
+def view_profile(username):
+    print(f"Displaying profile of {username}")
+    
 while True:
     show_menu()
 
