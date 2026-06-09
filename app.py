@@ -5,6 +5,10 @@ def show_menu():
     print("1. View Users")
     print("2. Exit")
 
+def signup(username):
+    users.append(username)
+    print(f"{username} registered successfully.")
+
 while True:
     show_menu()
 
