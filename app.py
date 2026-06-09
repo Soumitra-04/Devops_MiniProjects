@@ -4,6 +4,10 @@ def show_menu():
     print("\n=== User Management System ===")
     print("1. View Users")
     print("2. Exit")
+
+def login(username):
+    print(f"{username} logged in successfully.")
+
     
 def view_profile(username):
     print(f"Displaying profile of {username}")
@@ -29,3 +33,5 @@ while True:
 
     else:
         print("Invalid choice.")
+
+   
