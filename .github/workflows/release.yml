@@ -9,7 +9,6 @@ jobs:
 release:
 runs-on: ubuntu-latest
 
-```
 permissions:
   contents: write
 
@@ -76,4 +75,3 @@ steps:
     uses: softprops/action-gh-release@v2
     with:
       body_path: RELEASE_NOTES.md
-```
