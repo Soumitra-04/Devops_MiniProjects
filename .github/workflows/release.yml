@@ -1,66 +1,63 @@
 name: Docker Release Pipeline
 
 on:
-push:
-tags:
-- 'v*'
+  push:
+    tags:
+      - 'v*'
 
 jobs:
-release:
-runs-on: ubuntu-latest
+  release:
+    runs-on: ubuntu-latest
 
-```
-permissions:
-  contents: write
+    permissions:
+      contents: write
 
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  - name: Extract Version
-    id: version
-    run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      - name: Extract Version
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-  - name: Set Short SHA
-    id: sha
-    run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Set Short SHA
+        id: sha
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-  - name: Login to Docker Hub
-    uses: docker/login-action@v3
-    with:
-      username: ${{ secrets.DOCKER_USERNAME }}
-      password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-  - name: Build Docker Image
-    run: |
-      docker build \
-        -t soumitra04/flask-release-demo:${{ steps.version.outputs.VERSION }} \
-        -t soumitra04/flask-release-demo:${{ steps.sha.outputs.SHORT_SHA }} \
-        -f Day-3-Project/Dockerfile \
-        Day-3-Project
+      - name: Build Docker Image
+        run: |
+          docker build \
+          -t soumitra04/flask-release-demo:${{ steps.version.outputs.VERSION }} \
+          -t soumitra04/flask-release-demo:${{ steps.sha.outputs.SHORT_SHA }} \
+          -f Day-3-Project/Dockerfile \
+          Day-3-Project
 
-  - name: Push Version Tag
-    run: |
-      docker push soumitra04/flask-release-demo:${{ steps.version.outputs.VERSION }}
+      - name: Push Version Tag
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/flask-release-demo:${{ steps.version.outputs.VERSION }}
 
-  - name: Push SHA Tag
-    run: |
-      docker push soumitra04/flask-release-demo:${{ steps.sha.outputs.SHORT_SHA }}
+      - name: Push SHA Tag
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/flask-release-demo:${{ steps.sha.outputs.SHORT_SHA }}
 
-  - name: Generate Changelog
-    run: |
-      echo "# Release ${{ steps.version.outputs.VERSION }}" > RELEASE_NOTES.md
-      echo "" >> RELEASE_NOTES.md
-      git log -5 --pretty=format:"- %s" >> RELEASE_NOTES.md
+      - name: Generate Changelog
+        run: |
+          echo "# Release ${{ steps.version.outputs.VERSION }}" > RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          git log -10 --pretty=format:"- %s" >> RELEASE_NOTES.md
 
-  - name: Upload Release Notes Artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: release-notes
-      path: RELEASE_NOTES.md
-
-  - name: Create GitHub Release
-    uses: softprops/action-gh-release@v2
-    with:
-      body_path: RELEASE_NOTES.md
-```
+      - name: Upload Release Notes Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: RELEASE_NOTES.md
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
