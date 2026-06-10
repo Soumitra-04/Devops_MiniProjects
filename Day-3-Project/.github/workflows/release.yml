@@ -33,9 +33,10 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-          -t ${{ secrets.DOCKER_USERNAME }}/flask-release-demo:${{ steps.version.outputs.VERSION }} \
-          -t ${{ secrets.DOCKER_USERNAME }}/flask-release-demo:${{ steps.sha.outputs.SHORT_SHA }} \
-          .
+          -t soumitra04/flask-release-demo:${{ steps.version.outputs.VERSION }} \
+          -t soumitra04/flask-release-demo:${{ steps.sha.outputs.SHORT_SHA }} \
+          -f Day-3-Project/Dockerfile \
+          Day-3-Project
 
       - name: Push Version Tag
         run: |
